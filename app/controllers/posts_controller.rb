@@ -1,14 +1,24 @@
 class PostsController < ApplicationController
 
   def index   #indexというインスタンスメソッドを定義した
-    @posts = Post.all 
+    @posts = Post.all.order(id: "DESC")
   end
 
-  def new
+  def create
+    post = Post.create(content: params[:content], checked: false)
+    render json:{ post: post }x
   end
   
-  def create
-    Post.create(content: params[:content])
+  def checked
+    post = Post.find(params[:id])
+    if post.checked then
+      post.update(checked: false)
+    else
+      post.update(checked: true)
+    end
+
+    item = Post.find(params[:id])
+    render json: { post: item }
   end
 
 end
